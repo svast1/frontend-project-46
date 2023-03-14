@@ -2,18 +2,37 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js 16.x
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
-        node-version: '16.x'
-    - run: npm ci
-    - run: npm run lint
-    - run: npm test -- --coverage --coverageReporters=text-lcov | coveralls
+        node-version: ${{ matrix.node-version }}
+    - name: Install Dependencies
+      run: npm install
+    - name: Lint
+      run: npm run lint
+    - name: Test
+      run: npm test -- --coverage
+    - name: Upload Coverage to Code Climate
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      run: |
+        if [ -n "${{ env.CC_TEST_REPORTER_ID }}" ] && [ "${{ github.event_name }}" = "push" ]; then
+          npx jest --coverage --coverageReporters text-lcov | npx coveralls
+        else
+          echo "Not uploading coverage"
+        fi
