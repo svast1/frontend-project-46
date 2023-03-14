@@ -5,27 +5,23 @@ import _ from 'lodash';
 import { readFileSync } from 'fs';
 
 const genDiff = (data1, data2) => {
-  let acc = {}
-  const obj1 = Object.entries(data1)
-  const obj2 = Object.entries(data2)
-  for (const list1 of obj1) {
-    for (const list2 of obj2) {
-      if (list1[0] === list2[0] && list1[1] === list2[1]) {
-        acc[list1[0]] = list1[1] 
-     }
-      if (list1[0] === list2[0] && list1[1] !== list2[1]) {
-        acc['- ' + list1[0]] = list1[1]
-        acc['+ ' + list2[0]] = list2[1]
-  }
-      if (!_.has(data2, list1[0])) {
-        acc['- ' + list1[0]] = list1[1]
-      }
-      if (!_.has(data1, list2[0])) {
-        acc['+ ' + list2[0]] = list2[1]
-      }
-  }
-  }
-  const sortedKeys = Object.keys(acc).sort((a, b) => {
+  return [...Object.keys(data1), ...Object.keys(data2)].reduce((acc, key) => {
+    if (!_.has(data2, key)) {
+      acc[- `${key}`] = data1[key];
+    } else if (!_.has(data1, key)) {
+      acc[+ `${key}`] = data2[key];
+    } else if (_.isEqual(data1[key], data2[key])) {
+      acc[key] = data1[key];
+    } else {
+      acc[- `${key}`] = data1[key];
+      acc[+ `${key}`] = data2[key];
+    }
+    return acc;
+  }, {});
+};
+
+const sortData = (data) => {
+const sortedKeys = Object.keys(data).sort((a, b) => {
   if (a[0] === '+' || a[0] === '-') {
     a = a.slice(2);
   }
@@ -36,7 +32,7 @@ const genDiff = (data1, data2) => {
 });
 const sortedObj = {};
 sortedKeys.forEach(key => {
-  sortedObj[key] = acc[key];
+  sortedObj[key] = data[key];
 });
   return sortedObj
 }
@@ -45,7 +41,7 @@ const objToString = (obj) => {
   let diffStr = '{\n';
   for (const key in obj) {
   const value = obj[key]
-  diffStr += `  ${key}: ${value}\n`
+  diffStr +=`  ${key}: ${value}\n;`
 }
 diffStr += '}';
 return diffStr
@@ -60,5 +56,6 @@ const dataParse1 = JSON.parse(data1)
 const dataParse2 = JSON.parse(data2)
 
 const diff = genDiff(dataParse1, dataParse2);
-return objToString(diff)
+const sortDiff = sortData(diff)
+return objToString(sortDiff)
 }

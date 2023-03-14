@@ -5,7 +5,12 @@
   "main": "gendiff.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint"
+    "lint": "eslint",
+    "cc-test-reporter": "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter",
+    "cc-test-reporter-prepare": "chmod +x ./cc-test-reporter",
+    "cc-test-reporter-before-build": "./cc-test-reporter before-build",
+    "cc-test-reporter-after-build":
+  "if [[ ${{ github.event_name }} == 'pull_request' ]]; then\n ./cc-test-reporter format-coverage -t lcov ./coverage/lcov.info;\n ./cc-test-reporter upload-coverage -t lcov --input ./coverage/lcov.info;\n fi"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
@@ -50,6 +55,7 @@
   "homepage": "https://github.com/svast1/frontend-project-46#readme",
   "dependencies": {
     "commander": "^10.0.0",
+    "fs": "^0.0.1-security",
     "jest": "^29.5.0",
     "lodash": "^4.17.21"
   }
