@@ -2,6 +2,6 @@ install:
 	npm ci
 lint:
 	npx eslint .
-test-coverage:
+report:
 	npm test -- --coverage --coverageProvider=v8
 
