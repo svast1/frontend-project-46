@@ -9,7 +9,8 @@ import { isNested, nestedFiles, plainFiles } from '../src/logics.js'
 const genDiff = (data1, data2) => {
   if (isNested(data1, data2)) {
     return JSON.stringify(nestedFiles(data1, data2), null, 4).replace(/\"/g, "").replace(/\,/g, "")
-  } else return plainFiles(data1, data2)
+  }
+    return plainFiles(data1, data2)
 }
 
 export default (filepath1, filepath2) => {
