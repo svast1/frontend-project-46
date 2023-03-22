@@ -20,6 +20,6 @@ test('plain files genDiff', () => {
 });
 
 test('nested files genDiff', () => {
-  expect(genDiff(getFixturePath('nestedfile1.json'), getFixturePath('nestedfile2.json'))).toEqual(expected2);
-  expect(genDiff(getFixturePath('nestedfile1.yml'), getFixturePath('nestedfile2.yml'))).toEqual(expected2);
+  expect(genDiff(getFixturePath('nestedFile1.json'), getFixturePath('nestedFile2.json'))).toEqual(expected2);
+  expect(genDiff(getFixturePath('nestedFile1.yml'), getFixturePath('nestedFile2.yml'))).toEqual(expected2);
 });
