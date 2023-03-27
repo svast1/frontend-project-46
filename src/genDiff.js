@@ -8,7 +8,7 @@ import plainFormatter from '../formatters/plain.js'
 
 import { isNested, nestedFiles, plainFiles } from '../formatters/stylish.js'
 
-const genDiff = (formatType = 'stylish', data1, data2) => {
+const genDiff = (data1, data2, formatType = 'stylish') => {
   if (formatType === 'plain') {
     return plainFormatter(nestedFiles(data1, data2))
   }
@@ -18,10 +18,10 @@ const genDiff = (formatType = 'stylish', data1, data2) => {
     return plainFiles(data1, data2)
 }
 
-export default (filepath1, filepath2) => {
+export default (filepath1, filepath2, formatType) => {
 
 const dataParse1 = parser(filepath1)
 const dataParse2 = parser(filepath2)
 
-return genDiff(dataParse1, dataParse2);
+return genDiff(dataParse1, dataParse2, formatType);
 }
