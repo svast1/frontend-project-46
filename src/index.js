@@ -2,7 +2,7 @@
 
 /* eslint no-useless-escape: "off" */
 
-import parser from '../src/parser.js'
+import parser from './parser.js'
 
 import plainFormatter from '../formatters/plain.js'
 
