@@ -1,12 +1,14 @@
-#!/usr/bin/env node
-
 /* eslint no-useless-escape: "off" */
+/* eslint indent: "off", curly: "error" */
+/* eslint semi: "off", curly: "error" */
+/* eslint quotes: "off", curly: "error" */
+/* eslint padded-blocks: "off", curly: "error" */
 
 import parser from './parser.js'
 
-import plainFormatter from '../formatters/plain.js'
+import { stylish, stylishToString } from '../formatters/stylish.js'
 
-import stylish from '../formatters/stylish.js'
+import plainFormatter from '../formatters/plain.js'
 
 import jsonFormatter from '../formatters/json.js'
 
@@ -18,7 +20,7 @@ const genDiff = (data1, data2, formatType = 'stylish') => {
   if (formatType === 'json') {
     return jsonFormatter(diff)
   }
-  return JSON.stringify(diff, null, 4).replace(/\"/g, "").replace(/\,/g, "")
+  return stylishToString(JSON.stringify(diff, null, 4).replace(/\"/g, "").replace(/\,/g, ""))
 }
 
 export default (filepath1, filepath2, formatType) => {
